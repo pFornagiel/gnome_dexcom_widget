@@ -92,3 +92,7 @@ journalctl --user -u glucose-bar -f
 ## License
 
 [MIT](LICENSE)
+
+## Disclaimer:
+
+>*I am utilizing the Dexcom Share API solely for personal use and do not have any affiliation with Dexcom, Inc. This application is not endorsed, sponsored, or managed by Dexcom, and I do not take any responsibility for the accuracy or performance of the data provided through the API. Furthermore, I do not profit from, or claim ownership of, any Dexcom-related content or services. All trademarks, logos, and brand names belong to their respective owners.*

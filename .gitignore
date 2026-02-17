@@ -1,0 +1,21 @@
+# Rust
+/glucose-monitor/target/
+/target/
+**/*.rs.bk
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editors
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Secrets / Config
+.env
+.env.*
+config
+credentials
+*.secret

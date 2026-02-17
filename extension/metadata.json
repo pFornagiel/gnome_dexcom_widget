@@ -1,0 +1,7 @@
+{
+    "name": "Glucose Bar",
+    "description": "Displays Dexcom glucose levels in the top bar",
+    "uuid": "glucose-bar@pawel.com",
+    "shell-version": ["45", "46", "47", "48", "49"],
+    "version": 1
+}

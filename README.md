@@ -8,6 +8,10 @@ The extension was vibe-coded in one evening as a simple and small personal utili
 
 If anyone finds this useful, I am glad that claude brought some value to the society.
 
+<p align="center">
+  <img width="50%"  alt="image" src="https://github.com/user-attachments/assets/ff46b681-8007-46b7-a227-14640f1fede6" />
+</p>
+
 ## Prerequisites
 
 Before installing, ensure you have the following requirements:

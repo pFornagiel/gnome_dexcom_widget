@@ -102,11 +102,12 @@ fn compute_sleep_secs(reading_datetime: &str) -> u64 {
     const DEXCOM_INTERVAL: i64 = 300; // 5 minutes
     const BUFFER: i64 = 30;
     const MIN_SLEEP: i64 = 30;
+    const MAX_SLEEP: i64 = DEXCOM_INTERVAL + BUFFER;
 
     if let Ok(ts) = chrono::DateTime::parse_from_str(reading_datetime, "%Y-%m-%dT%H:%M:%S%z") {
         let age_secs = Utc::now().timestamp() - ts.timestamp();
         let ideal = DEXCOM_INTERVAL - age_secs + BUFFER;
-        return ideal.max(MIN_SLEEP) as u64;
+        return ideal.clamp(MIN_SLEEP, MAX_SLEEP) as u64;
     }
 
     // Fallback if we can't parse the timestamp
@@ -141,26 +142,43 @@ async fn main() -> Result<()> {
         if client.is_none() {
             eprintln!("glucose-monitor: (re)authenticating...");
             let cfg_ref = Arc::clone(&cfg);
-            match tokio::task::spawn_blocking(move || create_client(&cfg_ref)).await? {
-                Ok(c) => {
+            match tokio::task::spawn_blocking(move || create_client(&cfg_ref)).await {
+                Ok(Ok(c)) => {
                     eprintln!("glucose-monitor: authenticated");
                     client = Some(c);
                 }
-                Err(e) => {
+                Ok(Err(e)) => {
                     eprintln!("glucose-monitor: auth failed: {e}");
                     // Back off before retrying
                     time::sleep(Duration::from_secs(30)).await;
+                    continue;
+                }
+                Err(e) => {
+                    // dexrs panics internally (unwrap) on transient API errors;
+                    // catch the panic here instead of crashing the whole process.
+                    eprintln!("glucose-monitor: client creation panicked: {e}");
+                    time::sleep(Duration::from_secs(60)).await;
                     continue;
                 }
             }
         }
 
         let c = client.take().unwrap();
-        let result = tokio::task::spawn_blocking(move || {
+        let result = match tokio::task::spawn_blocking(move || {
             let res = fetch_reading(&c);
             (c, res)
         })
-        .await?;
+        .await
+        {
+            Ok(r) => r,
+            Err(e) => {
+                // dexrs may also panic during fetch; handle gracefully.
+                eprintln!("glucose-monitor: fetch panicked: {e}");
+                client = None;
+                time::sleep(Duration::from_secs(60)).await;
+                continue;
+            }
+        };
 
         let (returned_client, fetch_result) = result;
 

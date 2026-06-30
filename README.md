@@ -8,6 +8,10 @@ The extension was vibe-coded in one evening as a simple and small personal utili
 
 If anyone finds this useful, I am glad that claude brought some value to the society.
 
+<p align="center">
+  <img width="50%"  alt="image" src="https://github.com/user-attachments/assets/ff46b681-8007-46b7-a227-14640f1fede6" />
+</p>
+
 ## Prerequisites
 
 Before installing, ensure you have the following requirements:
@@ -88,3 +92,7 @@ journalctl --user -u glucose-bar -f
 ## License
 
 [MIT](LICENSE)
+
+## Disclaimer:
+
+>*I am utilizing the Dexcom Share API solely for personal use and do not have any affiliation with Dexcom, Inc. This application is not endorsed, sponsored, or managed by Dexcom, and I do not take any responsibility for the accuracy or performance of the data provided through the API. Furthermore, I do not profit from, or claim ownership of, any Dexcom-related content or services. All trademarks, logos, and brand names belong to their respective owners.*
